@@ -6,20 +6,19 @@
             app:startDestination="@+id/nav_home">
 
     <fragment
+            android:id="@+id/nav_main"
+            android:name="com.csed404.mmda.ui.home.HomeFragment"
+            android:label="@string/menu_home"
+            tools:layout="@layout/content_main">
+    </fragment>
+    <fragment
             android:id="@+id/nav_home"
             android:name="com.csed404.mmda.ui.home.HomeFragment"
             android:label="@string/menu_home"
             tools:layout="@layout/fragment_home"/>
-
     <fragment
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_today"
             android:name="com.csed404.mmda.ui.gallery.GalleryFragment"
-            android:label="@string/menu_gallery"
-            tools:layout="@layout/fragment_gallery"/>
-
-    <fragment
-            android:id="@+id/nav_slideshow"
-            android:name="com.csed404.mmda.ui.slideshow.SlideshowFragment"
-            android:label="@string/menu_slideshow"
-            tools:layout="@layout/fragment_slideshow"/>
+            android:label="@string/menu_today"
+            tools:layout="@layout/fragment_today"/>
 </navigation>
