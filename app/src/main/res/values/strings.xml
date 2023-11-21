@@ -14,4 +14,5 @@
     <string name="menu_today">Today</string>
     <string name="actionBtn">Retrieve my Day</string>
     <string name="contentMainTitle">My Calendar</string>
+    <string name="fab_description">Record my current feelings</string>
 </resources>

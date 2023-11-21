@@ -4,9 +4,10 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-                android:id="@+id/app_bar_search"
-                android:title="@string/action_search" app:actionViewClass="android.widget.SearchView"/>
+<!--        <item-->
+<!--                android:id="@+id/app_bar_search"-->
+<!--                android:title="@string/action_search"-->
+<!--                app:actionViewClass="android.widget.SearchView"/>-->
         <item
                 android:id="@+id/nav_home"
                 android:icon="@android:drawable/ic_menu_my_calendar"
