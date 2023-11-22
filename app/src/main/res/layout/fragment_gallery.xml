@@ -14,7 +14,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="top"
-            android:hint="내용"
+            android:hint="Records will show up here"
             android:inputType="textMultiLine"
             android:lines="8"
             android:maxLines="100"
@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="292dp"/>
     <Button
-            android:text="Button"
+            android:text="Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/saveButton"

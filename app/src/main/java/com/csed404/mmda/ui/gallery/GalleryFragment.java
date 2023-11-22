@@ -114,7 +114,7 @@ public class GalleryFragment extends Fragment {
     protected void saveRecord(){
         long now = System.currentTimeMillis();
         Date date = new Date(now);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM-dd", Locale.KOREA);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.KOREA);
         SimpleDateFormat dateLog = new SimpleDateFormat("hh-mm-ss", Locale.KOREA);
 
         File classDir = new File(getActivity().getFilesDir(), sdf.format(date));
