@@ -115,7 +115,7 @@ public class GalleryFragment extends Fragment {
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.KOREA);
-        SimpleDateFormat dateLog = new SimpleDateFormat("hh-mm-ss", Locale.KOREA);
+        SimpleDateFormat dateLog = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
 
         File classDir = new File(getActivity().getFilesDir(), sdf.format(date));
         if (!classDir.exists()) classDir.mkdirs();
@@ -213,7 +213,7 @@ public class GalleryFragment extends Fragment {
         @Override
         public void onResults(Bundle bundle) {
             ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-            String originText = recordText.getText().toString();  //기존 text
+            String originText = recordText.getText().toString();
 
             //인식 결과
             StringBuilder newText= new StringBuilder();

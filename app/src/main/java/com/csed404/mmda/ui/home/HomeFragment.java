@@ -19,6 +19,9 @@ import com.csed404.mmda.R;
 import com.csed404.mmda.databinding.FragmentHomeBinding;
 import com.csed404.mmda.ui.today.TodayFragment;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,3 +94,4 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 }
+
