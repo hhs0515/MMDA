@@ -10,10 +10,21 @@
             android:name="com.csed404.mmda.ui.home.HomeFragment"
             android:label="@string/menu_home"
             tools:layout="@layout/fragment_home">
+        <action android:id="@+id/action_nav_home_to_nav_gallery" app:destination="@id/nav_gallery"/>
     </fragment>
     <fragment
             android:id="@+id/nav_today"
             android:name="com.csed404.mmda.ui.today.TodayFragment"
             android:label="@string/menu_today"
+            tools:layout="@layout/fragment_today"/>
+    <fragment
+            android:id="@+id/nav_gallery"
+            android:name="com.csed404.mmda.ui.gallery.GalleryFragment"
+            android:label="@string/menu_gallery"
+            tools:layout="@layout/fragment_today"/>
+    <fragment
+            android:id="@+id/nav_slideshow"
+            android:name="com.csed404.mmda.ui.slideshow.SlideshowFragment"
+            android:label="@string/menu_slideshow"
             tools:layout="@layout/fragment_today"/>
 </navigation>

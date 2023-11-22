@@ -1,8 +1,11 @@
 package com.csed404.mmda;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
+import android.view.ViewGroup;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.snackbar.Snackbar;
@@ -14,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.csed404.mmda.databinding.ActivityMainBinding;
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,33 +32,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
+
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+        assert navHostFragment != null;
+        NavController navController = navHostFragment.getNavController();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_today)
                 .setOpenableLayout(drawer)
                 .build();
-
-//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
-//        NavController navController = navHostFragment.getNavController();
-//        NavigationUI.setupWithNavController(navigationView, navController);
-
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
-        NavController navController = navHostFragment.getNavController();
-        AppBarConfiguration appBarConfiguration =
-                new AppBarConfiguration.Builder(navController.getGraph()).build();
         Toolbar toolbar = findViewById(R.id.toolbar);
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
 
+        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.action_nav_home_to_nav_gallery);
+            }
+        });
     }
 
     @Override
@@ -70,4 +67,17 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Tasks to perform when the fragment is in the foreground
+    }
+
 }
