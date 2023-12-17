@@ -40,10 +40,14 @@ public class TodayFragment extends Fragment {
         logText = binding.dailyRawText;
         llmText = binding.generatedText;
 
-        binding.button.setOnClickListener(view -> generateJournal(String.valueOf(logText.getText())));
+        binding.button.setOnClickListener(view -> {
+            String log = sdf.format(date) + "\n" + logText.getText();
+            generateJournal(log);
+        });
         binding.saveButton.setOnClickListener(view -> saveJournal());
 
         setLogText();
+        setJournalText();
 
         return root;
     }
@@ -59,22 +63,43 @@ public class TodayFragment extends Fragment {
         File recordFile = new File(classDir, "record.txt");
         StringBuilder sb = new StringBuilder();
 
+        readFile(recordFile, sb, logText);
+    }
+
+    public void setJournalText(){
+        File classDir = new File(getActivity().getFilesDir(), sdf.format(date));
+        File recordFile = new File(classDir, "journal.txt");
+        StringBuilder sb = new StringBuilder();
+
+        if(recordFile.exists()){
+            readFile(recordFile, sb, llmText);
+        }
+    }
+
+    private void readFile(File recordFile, StringBuilder sb, EditText editText) {
         try (BufferedReader br = new BufferedReader(new FileReader(recordFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                // Process each line as needed
-                sb.append(line);
+                sb.append(line).append("\n");
             }
         } catch (IOException e) {
             sb.append("No record.");
         }
-        logText.setText(sb.toString());
+        editText.setText(sb.toString());
     }
 
     public void generateJournal(String log){
-        GptClient httpClient = new GptClient();
-        llmText.setText(httpClient.generateTxt(log));
+        final String[] generatedText = new String[1];
+        new Thread(() -> {
+            GptClient httpClient = new GptClient();
+            generatedText[0] = httpClient.generateTxt(log);
 
+            // Update UI on the main (UI) thread
+            getActivity().runOnUiThread(() -> {
+                llmText.setText(generatedText[0]);
+                Toast.makeText(getActivity().getApplicationContext(), "MMDA!.", Toast.LENGTH_LONG).show();
+            });
+        }).start();
     }
 
     public void saveJournal(){
@@ -86,5 +111,6 @@ public class TodayFragment extends Fragment {
             e.printStackTrace();
         }
         Toast.makeText(getActivity().getApplicationContext(), "Journal Saved.", Toast.LENGTH_SHORT).show();
+
     }
 }

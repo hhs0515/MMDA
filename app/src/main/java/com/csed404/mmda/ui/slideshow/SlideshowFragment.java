@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 
@@ -61,7 +60,7 @@ public class SlideshowFragment extends Fragment {
     @NotNull
     private StringBuilder getJournalOn(int cYear, int cMonth, int cDay) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.KOREA);
-        Date date = new Date(cYear, cMonth, cDay);
+        Date date = new Date(cYear-1900, cMonth, cDay);
 
         File classDir = new File(getActivity().getFilesDir(), sdf.format(date));
         File recordFile = new File(classDir, "journal.txt");
@@ -70,7 +69,7 @@ public class SlideshowFragment extends Fragment {
         try (BufferedReader br = new BufferedReader(new FileReader(recordFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                sb.append(line);
+                sb.append(line).append("\n");
             }
         } catch (IOException e) {
             sb.append("No record.");
