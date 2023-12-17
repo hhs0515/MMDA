@@ -7,11 +7,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class GptClient {
     private static final String OPENAI_API_KEY = BuildConfig.api_key;
 
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build();
 
     public String generateTxt(String log){
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -22,7 +27,7 @@ public class GptClient {
         JSONObject userMsg = new JSONObject();
         try {
             baseAi.put("role", "user");
-            baseAi.put("content", "일기로 써줘.");
+            baseAi.put("content", "줄글 형식 일기를 써줘:");
 
             userMsg.put("role", "user");
             userMsg.put("content", log);
@@ -43,7 +48,7 @@ public class GptClient {
         }
         RequestBody body = RequestBody.create(object.toString(), JSON);
         Request request = new Request.Builder()
-                .url("https://api.openai.com/v1/chat/completions")  //url 경로 수정됨
+                .url("https://api.openai.com/v1/chat/completions")
                 .header("Authorization", "Bearer "+ OPENAI_API_KEY)
                 .post(body)
                 .build();
@@ -55,7 +60,8 @@ public class GptClient {
                     JSONArray jsonArray = jsonObject.getJSONArray("choices");
                     result = jsonArray.getJSONObject(0).getJSONObject("message").getString("content");
             }
-        } catch (IOException ignored){
+        } catch (IOException e){
+            e.printStackTrace();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
