@@ -6,32 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHostController;
 import androidx.navigation.fragment.NavHostFragment;
 import com.csed404.mmda.R;
 import com.csed404.mmda.databinding.FragmentHomeBinding;
-import com.csed404.mmda.ui.today.TodayFragment;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private CalendarView mainCalendar;
-    private Button mainButton;
     private int cYear, cMonth, cDay;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -42,10 +31,9 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        mainCalendar = binding.calendarMain;
-        mainButton = binding.buttonAction;
+        CalendarView mainCalendar = binding.calendarMain;
+        Button mainButton = binding.buttonAction;
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
         Calendar calendar = Calendar.getInstance();
 
         cYear = calendar.get(Calendar.YEAR);
@@ -58,7 +46,7 @@ public class HomeFragment extends Fragment {
                 cDay = i2;
         });
 
-        mainButton.setOnClickListener( view -> {
+        mainButton.setOnClickListener(view -> {
             NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
             assert navHostFragment != null;
             NavController navController = navHostFragment.getNavController();
