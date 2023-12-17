@@ -56,7 +56,6 @@ public class HomeFragment extends Fragment {
                 cYear = i;
                 cMonth = i1;
                 cDay = i2;
-            Toast.makeText(getActivity().getApplicationContext(), "Date: " + cYear + " " + cMonth + " " + cDay, Toast.LENGTH_SHORT).show();
         });
 
         mainButton.setOnClickListener( view -> {
@@ -64,11 +63,16 @@ public class HomeFragment extends Fragment {
             assert navHostFragment != null;
             NavController navController = navHostFragment.getNavController();
 
+            Bundle bundle = new Bundle();
+            bundle.putInt("year", cYear);
+            bundle.putInt("month", cMonth);
+            bundle.putInt("day", cDay);
+
             if(cYear == calendar.get(Calendar.YEAR) && cMonth == calendar.get(Calendar.MONTH) && cDay == calendar.get(Calendar.DAY_OF_MONTH)){
                 navController.navigate(R.id.action_nav_home_to_nav_today);
             }
             else{
-                navController.navigate(R.id.action_nav_home_to_nav_slideshow);
+                navController.navigate(R.id.action_nav_home_to_nav_slideshow, bundle);
             }
         });
 

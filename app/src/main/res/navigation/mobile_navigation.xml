@@ -30,5 +30,18 @@
             android:id="@+id/nav_slideshow"
             android:name="com.csed404.mmda.ui.slideshow.SlideshowFragment"
             android:label="@string/menu_slideshow"
-            tools:layout="@layout/fragment_slideshow"/>
+            tools:layout="@layout/fragment_slideshow">
+
+        <argument
+                android:name="year"
+                app:argType="integer" />
+        <argument
+                android:name="month"
+                app:argType="integer" />
+        <argument
+                android:name="day"
+                app:argType="integer" />
+        <action android:id="@+id/action_nav_slideshow_to_nav_home" app:destination="@id/nav_home"/>
+
+    </fragment>
 </navigation>
