@@ -73,7 +73,7 @@ public class TodayFragment extends Fragment {
 
     public void generateJournal(String log){
         GptClient httpClient = new GptClient();
-        llmText.setText(httpClient.generateText(log));
+        llmText.setText(httpClient.generateTxt(log));
 
     }
 

@@ -1,37 +1,62 @@
 package com.csed404.mmda.ui.home;
 
 import okhttp3.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
 public class GptClient {
     private static final String OPENAI_API_KEY = System.getenv("MY_OPENAI_KEY");
-    private static final String OPENAI_API_URL = "https://api.openai.com/v1/engines/davinci-codex/completions";
+    private static final OkHttpClient client = new OkHttpClient();
 
-    public String generateText(String prompt) {
-        OkHttpClient client = new OkHttpClient();
+    public String generateTxt(String question){
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        String result = "";
 
-        RequestBody requestBody = new FormBody.Builder()
-                .add("prompt", prompt)
-                .build();
+        JSONArray arr = new JSONArray();
+        JSONObject baseAi = new JSONObject();
+        JSONObject userMsg = new JSONObject();
+        try {
+            baseAi.put("role", "user");
+            baseAi.put("content", "일기를 써줘.");
 
+            userMsg.put("role", "user");
+            userMsg.put("content", question);
+
+            arr.put(baseAi);
+            arr.put(userMsg);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        JSONObject object = new JSONObject();
+        try {
+
+            object.put("model", "gpt-3.5-turbo");
+            object.put("messages", arr);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        RequestBody body = RequestBody.create(object.toString(), JSON);
         Request request = new Request.Builder()
-                .url(OPENAI_API_URL)
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .header("Authorization", "Bearer " + OPENAI_API_KEY)
-                .post(requestBody)
+                .url("https://api.openai.com/v1/chat/completions")  //url 경로 수정됨
+                .header("Authorization", "Bearer "+OPENAI_API_KEY)
+                .post(body)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
+            if(response.isSuccessful()){
                 assert response.body() != null;
-                return response.body().string();
-            } else {
-                return null;
+                JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray jsonArray = jsonObject.getJSONArray("choices");
+                    result = jsonArray.getJSONObject(0).getJSONObject("message").getString("content");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        } catch (IOException ignored){
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
+        return result;
     }
 }

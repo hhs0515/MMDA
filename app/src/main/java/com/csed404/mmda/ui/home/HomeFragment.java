@@ -14,9 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.csed404.mmda.R;
 import com.csed404.mmda.databinding.FragmentHomeBinding;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 public class HomeFragment extends Fragment {
 
