@@ -1,5 +1,6 @@
 package com.csed404.mmda.ui.today;
 
+import android.media.Image;
 import android.widget.Toast;
 import com.csed404.mmda.ui.home.GptClient;
 
@@ -14,7 +15,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.csed404.mmda.databinding.FragmentTodayBinding;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Locale;
 
@@ -44,6 +47,12 @@ public class TodayFragment extends Fragment {
             String log = sdf.format(date) + "\n" + logText.getText();
             generateJournal(log);
         });
+
+        binding.imgBtn.setOnClickListener(view ->{
+            String log = sdf.format(date) + "\n" + logText.getText();
+            generateImage(log);
+        });
+
         binding.saveButton.setOnClickListener(view -> saveJournal());
 
         setLogText();
@@ -103,6 +112,18 @@ public class TodayFragment extends Fragment {
         }).start();
     }
 
+    public void generateImage(String log){
+        Toast.makeText(getActivity().getApplicationContext(), "On request...", Toast.LENGTH_LONG).show();
+        new Thread(() -> {
+            GptClient httpClient = new GptClient();
+            String img = httpClient.generatePic(httpClient.generateTxt(log, "내 하루를 키워드로 요약해줘"));
+            saveImage(img);
+            getActivity().runOnUiThread(() -> {
+                Toast.makeText(getActivity().getApplicationContext(), "Image generated!", Toast.LENGTH_LONG).show();
+            });
+        }).start();
+    }
+
     public void saveJournal(){
         File classDir = new File(getActivity().getFilesDir(), sdf.format(date));
         if (!classDir.exists()) classDir.mkdirs();
@@ -113,5 +134,19 @@ public class TodayFragment extends Fragment {
         }
         Toast.makeText(getActivity().getApplicationContext(), "Journal Saved.", Toast.LENGTH_SHORT).show();
 
+    }
+
+    public void saveImage(String img){
+        File classDir = new File(getActivity().getFilesDir(), sdf.format(date));
+        if (!classDir.exists()) classDir.mkdirs();
+        try (FileOutputStream outputStream = new FileOutputStream(new File(classDir, "image.png"))) {
+            byte[] imageBytes = new byte[0];
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                imageBytes = Base64.getDecoder().decode(img);
+            }
+            outputStream.write(imageBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

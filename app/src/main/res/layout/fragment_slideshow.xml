@@ -8,28 +8,28 @@
         tools:context=".ui.slideshow.SlideshowFragment">
 
     <EditText
-            android:layout_width="0dp"
+            android:layout_width="404dp"
             android:layout_height="0dp"
             android:inputType="textMultiLine"
-            android:scrollbars = "vertical"
+            android:scrollbars="vertical"
             android:text="Daily journal Here"
             android:ems="10"
             android:id="@+id/dailyJournal"
-            android:layout_marginTop="48dp" android:layout_marginBottom="307dp"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toTopOf="@+id/returnButton"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"/>
-    <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp" tools:src="@tools:sample/backgrounds/scenic"
-            android:id="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/dailyJournal" android:layout_marginBottom="157dp"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="27dp" android:layout_marginBottom="314dp"/>
     <Button
             android:text="Return to main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/returnButton"
-            app:layout_constraintTop_toBottomOf="@+id/dailyJournal"
-            android:layout_marginBottom="78dp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/dailyJournal" android:layout_marginBottom="48dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    <ImageView
+            android:layout_width="256dp"
+            android:layout_height="256dp" tools:src="@tools:sample/backgrounds/scenic"
+            android:id="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/dailyJournal" android:layout_marginBottom="100dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

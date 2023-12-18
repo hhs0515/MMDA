@@ -1,5 +1,7 @@
 package com.csed404.mmda.ui.slideshow;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +45,12 @@ public class SlideshowFragment extends Fragment {
             int cMonth = args.getInt("month");
             int cDay = args.getInt("day");
             StringBuilder sb = getJournalOn(cYear, cMonth, cDay);
+            Bitmap bitmap = getImageOn(cYear, cMonth, cDay);
+
             binding.dailyJournal.setText(sb.toString());
+            if(bitmap != null){
+                binding.imageView.setImageBitmap(bitmap);
+            }
         }
 
         binding.returnButton.setOnClickListener(view -> {
@@ -75,6 +82,16 @@ public class SlideshowFragment extends Fragment {
             sb.append("No record.");
         }
         return sb;
+    }
+
+    private Bitmap getImageOn(int cYear, int cMonth, int cDay) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.KOREA);
+        Date date = new Date(cYear-1900, cMonth, cDay);
+
+        File classDir = new File(getActivity().getFilesDir(), sdf.format(date));
+        File recordFile = new File(classDir, "image.png");
+        if(!recordFile.exists()) return null;
+        return BitmapFactory.decodeFile(recordFile.getAbsolutePath());
     }
 
     @Override

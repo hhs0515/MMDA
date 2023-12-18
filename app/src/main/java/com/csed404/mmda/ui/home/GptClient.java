@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +32,7 @@ public class GptClient {
             baseAi.put("role", "user");
             if(content.isEmpty()){
                 baseAi.put("content", "생각, 느낌, 경험을 표현하는 오늘의 일기를 써줘. 일기는 개인적이고 통찰력있게 작성해줘\n" +
-                        " 시간 로그를 '시간 - 내용' 형식으로 포함시켜줘");
+                        " 시간 로그는 포함하지 말아줘");
             }
             else baseAi.put("content", content);
 
@@ -72,17 +73,17 @@ public class GptClient {
         return result;
     }
 
-    public String generatePic(String log){
+    public String generatePic(String keyword){
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        String imageUrl = "";
-        String keyword = generateTxt(log, "내 하루를 키워드로 요약해줘");
+        String image = "";
 
         JSONObject object = new JSONObject();
         try {
-            object.put("model", "dall-e-2");
+            object.put("model", "dall-e-3");
             object.put("prompt", keyword);
             object.put("n", 1);
             object.put("size", "1024x1024"); // Image size
+            object.put("response_format", "b64_json");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -101,17 +102,14 @@ public class GptClient {
                 JSONArray dataArray = jsonObject.getJSONArray("data");
                 if (dataArray.length() > 0) {
                     JSONObject dataObject = dataArray.getJSONObject(0);
-                    imageUrl = dataObject.getJSONObject("image").getString("url");
-                    System.out.println("Generated Image URL: " + imageUrl);
+                    image = dataObject.getString("b64_json");
                 } else {
-                    System.out.println("No data in the response");
                 }
             }
-        } catch (IOException e){
+        } catch (IOException | JSONException e){
             e.printStackTrace();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
         }
-        return imageUrl;
+
+        return image;
     }
 }
