@@ -90,14 +90,15 @@ public class TodayFragment extends Fragment {
 
     public void generateJournal(String log){
         final String[] generatedText = new String[1];
+        Toast.makeText(getActivity().getApplicationContext(), "On request...", Toast.LENGTH_LONG).show();
         new Thread(() -> {
             GptClient httpClient = new GptClient();
-            generatedText[0] = httpClient.generateTxt(log);
+            generatedText[0] = httpClient.generateTxt(log, "");
 
             // Update UI on the main (UI) thread
             getActivity().runOnUiThread(() -> {
                 llmText.setText(generatedText[0]);
-                Toast.makeText(getActivity().getApplicationContext(), "MMDA!.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), "MMDA!", Toast.LENGTH_LONG).show();
             });
         }).start();
     }
