@@ -15,10 +15,10 @@ public class GptClient {
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
             .build();
 
-    public String generateTxt(String log){
+    public String generateTxt(String log, String content){
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         String result = "";
 
@@ -26,8 +26,14 @@ public class GptClient {
         JSONObject baseAi = new JSONObject();
         JSONObject userMsg = new JSONObject();
         try {
+            baseAi.put("role", "system");
+            baseAi.put("content", "Automated diary writer를 찾아줘서 고마워! 어떤 것을 도와줄까?");
             baseAi.put("role", "user");
-            baseAi.put("content", "줄글 형식 일기를 써줘:");
+            if(content.isEmpty()){
+                baseAi.put("content", "생각, 느낌, 경험을 표현하는 오늘의 일기를 써줘. 일기는 개인적이고 통찰력있게 작성해줘\n" +
+                        " 시간 로그를 '시간 - 내용' 형식으로 포함시켜줘");
+            }
+            else baseAi.put("content", content);
 
             userMsg.put("role", "user");
             userMsg.put("content", log);
@@ -60,11 +66,52 @@ public class GptClient {
                     JSONArray jsonArray = jsonObject.getJSONArray("choices");
                     result = jsonArray.getJSONObject(0).getJSONObject("message").getString("content");
             }
+        } catch (IOException | JSONException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String generatePic(String log){
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        String imageUrl = "";
+        String keyword = generateTxt(log, "내 하루를 키워드로 요약해줘");
+
+        JSONObject object = new JSONObject();
+        try {
+            object.put("model", "dall-e-2");
+            object.put("prompt", keyword);
+            object.put("n", 1);
+            object.put("size", "1024x1024"); // Image size
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestBody body = RequestBody.create(object.toString(), JSON);
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/images/generations")
+                .header("Authorization", "Bearer "+ OPENAI_API_KEY)
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if(response.isSuccessful()){
+                assert response.body() != null;
+                JSONObject jsonObject = new JSONObject(response.body().string());
+                JSONArray dataArray = jsonObject.getJSONArray("data");
+                if (dataArray.length() > 0) {
+                    JSONObject dataObject = dataArray.getJSONObject(0);
+                    imageUrl = dataObject.getJSONObject("image").getString("url");
+                    System.out.println("Generated Image URL: " + imageUrl);
+                } else {
+                    System.out.println("No data in the response");
+                }
+            }
         } catch (IOException e){
             e.printStackTrace();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        return result;
+        return imageUrl;
     }
 }
